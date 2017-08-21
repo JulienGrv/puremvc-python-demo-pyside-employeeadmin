@@ -2,8 +2,6 @@
 
 from puremvc.patterns.facade import Facade
 
-# from . import controller
-
 
 class ApplicationFacade(Facade):
 
@@ -34,11 +32,3 @@ class ApplicationFacade(Facade):
         self.registerCommand(self.ADD_ROLE_RESULT,
                              controller.AddRoleResultCommand)
         self.sendNotification(self.STARTUP, args)
-
-    # def initializeController(self):
-    #     super(ApplicationFacade, self).initializeController()
-    #     from . import controller
-    #     self.registerCommand(self.STARTUP, controller.StartupCommand)
-    #     self.registerCommand(self.DELETE_USER, controller.DeleteUserCommand)
-    #     self.registerCommand(self.ADD_ROLE_RESULT,
-    #                          controller.AddRoleResultCommand)
