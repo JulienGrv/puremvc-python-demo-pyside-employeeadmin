@@ -28,7 +28,8 @@ class RoleListWidget(QtGui.QWidget):
 
     @userRoles.setter
     def userRoles(self, roles):
-        self.roleListModel.clear()
+        rowCount = self.roleListModel.rowCount()
+        self.roleListModel.removeRows(0, rowCount)
         if roles:
             for role in roles:
                 rowCount = self.roleListModel.rowCount()
@@ -36,8 +37,6 @@ class RoleListWidget(QtGui.QWidget):
                 index = self.roleListModel.index(rowCount, 0,
                                                  QtCore.QModelIndex())
                 self.roleListModel.setData(index, role)
-        else:
-            self.roleListModel.clear()
 
     @property
     def roles(self):
@@ -65,8 +64,8 @@ class RoleListWidget(QtGui.QWidget):
 
         self.roleListModel = RoleListModel(self)
         self.ui.listView.setModel(self.roleListModel)
-        self.setEnabled(False)
         self.ui.fullnameLabel.setText(None)
+        self.setEnabled(False)
 
         self._user = None
         self._roles = None
@@ -76,9 +75,6 @@ class RoleListWidget(QtGui.QWidget):
             self.ui.addPushButton.clicked.connect(callback)
         elif event == self.REMOVE:
             self.ui.removePushButton.clicked.connect(callback)
-
-    def reset(self):
-        self.ui.roleComboBox.setCurrentIndex(0)
 
 
 class RoleListModel(QtCore.QAbstractListModel):
@@ -98,7 +94,7 @@ class RoleListModel(QtCore.QAbstractListModel):
         return True
 
     def removeRows(self, row, count, parent=QtCore.QModelIndex):
-        self.beginRemoveRows(QtCore.QModelIndex(), index, count)
+        self.beginRemoveRows(QtCore.QModelIndex(), row, count)
         del self._roles[row:row + count]
         self.endRemoveRows()
         return True
@@ -120,6 +116,3 @@ class RoleListModel(QtCore.QAbstractListModel):
             self.dataChanged.emit(index, index)
             return True
         return False
-
-    def clear(self):
-        del self._roles[:]

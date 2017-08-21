@@ -38,8 +38,11 @@ class UserTableMediator(Mediator):
         self.sendNotification(ApplicationFacade.NEW_USER, model.vo.UserVO())
 
     def onDelete(self):
-        self.sendNotification(ApplicationFacade.DELETE_USER,
-                              self.viewComponent.selectedUser)
+        username = self.viewComponent.selectedUser
+        for user in self.userProxy.data:
+            if user.username == username:
+                break
+        self.sendNotification(ApplicationFacade.DELETE_USER, user)
 
     def onSelect(self):
         username = self.viewComponent.selectedUser

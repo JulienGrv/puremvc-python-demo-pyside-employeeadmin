@@ -16,8 +16,11 @@ class RoleProxy(Proxy):
     def addItem(self, role):
         self.data.append(role)
 
-    def deleteItem(self, role):
-        self.data.remove(role)
+    def deleteItem(self, user):
+        for role in self.data:
+            if role.username == user.username:
+                self.data.remove(role)
+                break
 
     def doesUserHaveRole(self, user, role):
         return role in self.getUserRoles(user.username)

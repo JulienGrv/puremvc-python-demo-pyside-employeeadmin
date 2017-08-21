@@ -27,38 +27,35 @@ class RoleListMediator(Mediator):
         name = notification.getName()
         roleList = self.viewComponent
         if name == ApplicationFacade.NEW_USER:
-            self.clearForm()
+            roleList.user = None
+            roleList.userRoles = None
+            roleList.setEnabled(False)
         elif name == ApplicationFacade.USER_ADDED:
             roleList.user = notification.getBody()
+            roleList.userRoles = None
             role = model.vo.RoleVO(roleList.user.username)
             self.roleProxy.addIem(role)
-            self.clearForm()
             roleList.setEnabled(False)
         elif name == ApplicationFacade.USER_UPDATED:
-            self.clearForm()
+            roleList.user = None
+            roleList.userRoles = None
             roleList.setEnabled(False)
         elif name == ApplicationFacade.USER_DELETED:
-            self.clearForm()
+            roleList.user = None
+            roleList.userRoles = None
             roleList.setEnabled(False)
         elif name == ApplicationFacade.CANCEL_SELECTED:
-            self.clearForm()
+            roleList.user = None
+            roleList.userRoles = None
             roleList.setEnabled(False)
         elif name == ApplicationFacade.USER_SELECTED:
             roleList.user = notification.getBody()
             roleList.userRoles = self.roleProxy.getUserRoles(
                 roleList.user.username)
-            roleList.reset()
             roleList.setEnabled(True)
         elif name == ApplicationFacade.ADD_ROLE_RESULT:
             roleList.userRoles = self.roleProxy.getUserRoles(
                 roleList.user.username)
-            roleList.reset()
-
-    def clearForm(self):
-        roleList = self.viewComponent
-        roleList.user = None
-        roleList.userRoles = None
-        roleList.reset()
 
     def onRegister(self):
         self.viewComponent.roles = model.enum.RoleEnum()

@@ -34,7 +34,11 @@ class UserFormWidget(QtGui.QWidget):
             self.ui.emailLineEdit.setText(user.email)
             self.ui.usernameLineEdit.setText(user.username)
             self.ui.passwordLineEdit.setText(user.password)
-            # self.ui.departmentComboBox.setCurrentText(user.department)
+            self.ui.confirmPasswordLineEdit.setText(user.password)
+            for index, department in enumerate(self._departments):
+                if department == user.department:
+                    self.ui.departmentComboBox.setCurrentIndex(index)
+                    break
         else:
             self.ui.label.setText(None)
             self.ui.firstNameLineEdit.setText(None)
@@ -63,14 +67,14 @@ class UserFormWidget(QtGui.QWidget):
         return self._departments
 
     @departments.setter
-    def department(self, departments):
-        if departments and len(departments) > 0:
+    def departments(self, departments):
+        if departments:
             self._departments = departments
             for department in departments:
                 self.ui.departmentComboBox.addItem(department)
         else:
+            self._departments = None
             self.ui.departmentComboBox.clear()
-            return None
 
     def __init__(self, parent=None):
         super(UserFormWidget, self).__init__(parent)
@@ -88,13 +92,3 @@ class UserFormWidget(QtGui.QWidget):
             self.ui.updateProfilePushButton.clicked.connect(callback)
         elif event == self.CANCEL:
             self.ui.cancelPushButton.clicked.connect(callback)
-
-    def reset(self):
-        self.ui.usernameLabel.setText('username')
-        self.ui.firstNameLineEdit.setText(None)
-        self.ui.lastNameLineEdit.setText(None)
-        self.ui.emailLineEdit.setText(None)
-        self.ui.usernameLineEdit.setText(None)
-        self.ui.passwordLineEdit.setText(None)
-        self.ui.confirmPasswordLineEdit.setText(None)
-        self.ui.departmentComboBox.setCurrentIndex(-1)

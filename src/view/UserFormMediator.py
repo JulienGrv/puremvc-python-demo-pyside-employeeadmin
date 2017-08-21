@@ -26,13 +26,13 @@ class UserFormMediator(Mediator):
             self.viewComponent.user = notification.getBody()
             self.viewComponent.mode = self.viewComponent.MODE_ADD
         elif name == ApplicationFacade.USER_DELETED:
-            self.viewComponent.reset()
+            self.viewComponent.user = None
         elif name == ApplicationFacade.USER_SELECTED:
             self.viewComponent.user = notification.getBody()
             self.viewComponent.mode = self.viewComponent.MODE_EDIT
 
     def onRegister(self):
-        self.departments = model.enum.DeptEnum()
+        self.viewComponent.departments = model.enum.DeptEnum()
         self.viewComponent.addEventListener(self.viewComponent.UPDATE_PROFILE,
                                             self.onUpdateProfile)
         self.viewComponent.addEventListener(self.viewComponent.CANCEL,
@@ -48,7 +48,7 @@ class UserFormMediator(Mediator):
             self.userProxy.updateItem(self.viewComponent.user)
             self.sendNotification(ApplicationFacade.USER_UPDATED,
                                   self.viewComponent.user)
-        self.viewComponent.reset()
+        self.viewComponent.user = None
 
     def onCancel(self):
         self.sendNotification(ApplicationFacade.CANCEL_SELECTED)
